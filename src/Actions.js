@@ -9,6 +9,7 @@
 import { assert } from './Util';
 import Scene from './Scene';
 import * as ActionConst from './ActionConst';
+import EventEmitter from "react-native-eventemitter";
 
 export const ActionMap = {
   jump: ActionConst.JUMP,
@@ -180,7 +181,11 @@ class Actions {
     this[key] =
       (props = {}) => {
         assert(this.callback, 'Actions.callback is not defined!');
+        EventEmitter.emit("setTabBarTouchEventEnable", false);
         this.callback({ key, type, ...filterParam(props) });
+        setTimeout(()=>{
+          EventEmitter.emit("setTabBarTouchEventEnable", true);
+        }, 200);
       };
     refs[res.key] = res;
 
